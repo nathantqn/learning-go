@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	channelWithSelectStatement()
+	varInitExample()
 }
 
 func varInitExample() {
@@ -256,4 +256,98 @@ func channelWithSelectStatement() {
 	// 		fmt.Println(ms2)
 	// 	}
 	// }
+}
+
+type Animal interface {
+	introduce()
+}
+
+type Dog struct {
+	name string
+}
+
+func (d *Dog) introduce() {
+	// if d == nil {
+	// 	fmt.Println("<nil>")
+	// 	return
+	// }
+	fmt.Println("My name is", d.name)
+}
+
+type Cat struct {
+	name string
+}
+
+func (c *Cat) introduce() {
+	// if c == nil {
+	// 	fmt.Println("<nil>")
+	// 	return
+	// }
+	fmt.Println("My name is", c.name)
+}
+
+func interfaceExample() {
+	var animal Animal = &Cat{name: "Mèo"}
+	animal.introduce()
+	animal = &Dog{name: "Chó"}
+	animal.introduce()
+}
+
+func interfaceValuesExample() {
+	var animal Animal = &Cat{name: "C"}
+	describe(animal)
+	animal = &Dog{name: "D"}
+	describe(animal)
+}
+
+func describe(t interface{}) {
+	fmt.Printf("(Type: %T, Value: %v)\n", t, t)
+}
+
+func interfaceWithUnderlyingNilValue() {
+	var animal Animal
+	var dog *Dog
+	animal = dog
+	describe(animal)
+	animal.introduce()
+}
+
+func interfaceWithNilValue() {
+	var animal Animal
+	describe(animal)
+	animal.introduce()
+}
+
+func emptyInterfaceExample() {
+	var emptyInterface interface{}
+	emptyInterface = 1
+	describe(emptyInterface)
+	emptyInterface = "hello"
+	describe(emptyInterface)
+	i := 5
+	describe(i)
+}
+
+type MyError struct {
+	errString string
+}
+
+func (mE *MyError) Error() string {
+	return mE.errString
+}
+
+func sqrtWithError(f float64) (float64, error) {
+	if f < 0 {
+		return 0, &MyError{errString: "input number is negative"}
+	}
+	return math.Sqrt(f), nil
+}
+
+func errorExample() {
+	i := 4.0
+	if value, err := sqrtWithError(i); err != nil {
+		fmt.Println(err)
+	} else {
+		fmt.Println(value)
+	}
 }
