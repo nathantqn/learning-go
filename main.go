@@ -147,11 +147,17 @@ func structExample() {
 func structWithMethod() {
 	p := Person{name: "nhat", age: 23}
 	fmt.Println(p)
+	p.changeNameWithoutPointer("hello")
+	fmt.Println(p)
 	p.changeName("codelink")
 	fmt.Println(p)
 }
 
 func (p *Person) changeName(newName string) {
+	p.name = newName
+}
+
+func (p Person) changeNameWithoutPointer(newName string) {
 	p.name = newName
 }
 
@@ -202,12 +208,13 @@ func countWithChan(msgSent string, c chan string) {
 	}
 
 	// close channel, only close in sender, if close in receiver --> deadlock, because channel is closed but sender keep sending
-	close(c)
+	// close(c)
 }
 
 func channelWithBufferedExample() {
 	// Init code will be deadlock
 	c := make(chan string)
+
 	c <- "hello"
 
 	msg := <-c
